@@ -54,7 +54,13 @@ public class brain : MonoBehaviour {
 	public static void spawnTile()
 	{
 		GameObject newTile;
-		GameObject chosenTile = tile_list[Random.Range(0,tile_list.Length)]; //pick random tile from given list
+		int ran = Random.Range (0, tile_list.Length);
+
+		//only spawn 5 (arrow) after passing 10 tiles
+		if (ran == 5 && tileCount<10)
+			ran = 0;
+
+		GameObject chosenTile = tile_list[ran]; //pick random tile from given list
 		Vector3 newPos = lastTile.transform.position;
 		newPos.y += tile_height; //Set new tiles position above the last tiles position
 
