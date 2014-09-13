@@ -14,7 +14,8 @@ public class brain : MonoBehaviour {
 	//Points
 	public static int points = 0;
 	public static int goal = 100;
-	public int goalIncrease = 20;
+	public int goalIncrease = 10;
+	private static int coinDecrease = 10;
 	//UI
 	public UISlider progressBar;
 	public UILabel level_text;
@@ -28,7 +29,7 @@ public class brain : MonoBehaviour {
 	{
 		tile_list = tile_list_editor; //assign our static list to the editor list so that our static function can use it 
 		lastTile = lastTile_editor; //assign our static lastTile to the editor one so that our static function can use it 
-
+		coinDecrease = Mathf.RoundToInt(goal/10);
 		//Call initial tile spawn
 		spawnTile();
 	}
@@ -43,12 +44,7 @@ public class brain : MonoBehaviour {
 		level_text.text = level.ToString();
 		if (points >= goal) //HIT GOAL /LEVEL UP!!
 		{
-			//reset and increase goal
-			points = 0;
-			goal += goalIncrease;
-			level+=1;
-			level_glow.glow();
-			AudioSource.PlayClipAtPoint(levelUpSound, transform.position); //play level up sound
+			levelUp();
 		}
 	}
 
@@ -65,7 +61,7 @@ public class brain : MonoBehaviour {
 		lastTile = newTile; //Assign last tile to the new tile that was created
 	}
 
-	//Add points
+	//Add Points
 	public static void addPoints(int amount)
 	{
 		points += amount;//add points
@@ -78,5 +74,32 @@ public class brain : MonoBehaviour {
 		{
 			points = goal;
 		}
+	}
+
+	//Remove Points (for dying)
+	public static void died()
+	{
+		points -= coinDecrease;//remove points
+		//cap points
+		if (points < 0)
+		{
+			points = 0;
+		}
+		if (points > goal)
+		{
+			points = goal;
+		}
+	}
+
+	//LEVEL UP!!!
+	void levelUp()
+	{
+		//reset and increase goal
+		points = 0;
+		goal += goalIncrease; //increase amount of coins needed to meet next goal (levelUp)
+		coinDecrease = Mathf.RoundToInt(goal/10); //increase coin amount removed on death (10% of current goal)
+		level+=1;
+		level_glow.glow();
+		AudioSource.PlayClipAtPoint(levelUpSound, transform.position); //play level up sound
 	}
 }
