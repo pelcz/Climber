@@ -9,6 +9,7 @@ public class spawnTile_volume : MonoBehaviour {
 	void Start()
 	{
 		player_ref =  GameObject.FindGameObjectWithTag("Player").GetComponent<ec_player>();
+		brain.tileCount += 1; //add one to tileCount in brain
 	}
 	
 	//ENTER - Spawn new tile

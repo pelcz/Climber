@@ -11,6 +11,7 @@ public class brain : MonoBehaviour {
 	private static GameObject lastTile;
 	//Height to spawn next tile above lastTile
 	private static float tile_height = 18f;
+	public static int tileCount = 0;
 	//Points
 	public static int points = 0;
 	public static int goal = 100;
@@ -30,6 +31,7 @@ public class brain : MonoBehaviour {
 		tile_list = tile_list_editor; //assign our static list to the editor list so that our static function can use it 
 		lastTile = lastTile_editor; //assign our static lastTile to the editor one so that our static function can use it 
 		coinDecrease = Mathf.RoundToInt(goal/10);
+		tileCount = 0; //reset tile count on new round
 		//Call initial tile spawn
 		spawnTile();
 	}
