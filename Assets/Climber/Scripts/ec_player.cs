@@ -111,7 +111,7 @@ public class ec_player : MonoBehaviour
 
 		//temp removal of ground collision to fix bug where dying at the beggining will make the player stuck
 		ground_ref.GetComponent<BoxCollider2D> ().enabled = false;
-		brain.addPoints (-10); //remove coins
+		brain.died (); //remove coins
 		bar_glow.glow ("sub"); //play red glow
 	}
 
