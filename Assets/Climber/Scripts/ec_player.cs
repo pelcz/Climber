@@ -165,7 +165,7 @@ public class ec_player : MonoBehaviour
 					{
 						if(xdis>0)
 						{
-							//Debug.Log("fling left");
+							Debug.Log("fling left");
 							//reset wall bools
 							onLeft = false;
 							onRight = false;
@@ -183,7 +183,7 @@ public class ec_player : MonoBehaviour
 					{
 						if(xdis<0)
 						{
-							//Debug.Log("fling right");
+							Debug.Log("fling right");
 							//reset wall bools
 							onLeft = false;
 							onRight = false;
@@ -230,14 +230,15 @@ public class ec_player : MonoBehaviour
 			{
 				if(Input.GetKeyDown(KeyCode.LeftArrow))
 				{
-					//Debug.Log("fling left");
+					Debug.Log("fling left");
 					//reset wall bools
 					onLeft = false;
 					onRight = false;
 					onGround = false;
 					
 					//Apply Fling!
-					rigidbody2D.AddForce(new Vector2(-1f * flingSpeed, 1 * flingHeight));
+					//rigidbody2D.velocity = new Vector2(0f,0f); //null out velocity before applying force
+					rigidbody2D.AddForce(new Vector2(-1f * flingSpeed, 1 * flingHeight), ForceMode2D.Force);
 					AudioSource.PlayClipAtPoint(jumpSound, transform.position, 0.8f);
 					GameObject.Find("instructions").GetComponent<UILabel>().alpha = 0f;
 					if(Camera.main.audio.isPlaying==false)
@@ -248,14 +249,15 @@ public class ec_player : MonoBehaviour
 			{
 				if(Input.GetKeyDown(KeyCode.RightArrow))
 				{
-					//Debug.Log("fling right");
+					Debug.Log("fling right");
 					//reset wall bools
 					onLeft = false;
 					onRight = false;
 					onGround = false;
 					
 					//Apply Fling!
-					rigidbody2D.AddForce(new Vector2(1f * flingSpeed, 1 * flingHeight));
+					//rigidbody2D.velocity = new Vector2(0f,0f); //null out velocity before applying force
+					rigidbody2D.AddForce(new Vector2(1f * flingSpeed, 1 * flingHeight), ForceMode2D.Force);
 					AudioSource.PlayClipAtPoint(jumpSound, transform.position, 0.8f);
 					GameObject.Find("instructions").GetComponent<UILabel>().alpha = 0f;
 					if(Camera.main.audio.isPlaying==false)
@@ -266,11 +268,13 @@ public class ec_player : MonoBehaviour
 			{
 				if(Input.GetKeyDown(KeyCode.LeftArrow))//Left
 				{	
+					Debug.Log("fling left flailing");
 					//Apply Fling!
 					rigidbody2D.AddForce(new Vector2(-1f * flingSpeed/6, 45f));
 				}
 				if(Input.GetKeyDown(KeyCode.RightArrow))//Right
 				{	
+					Debug.Log("fling right flailing");
 					//Apply Fling!
 					rigidbody2D.AddForce(new Vector2(1f * flingSpeed/6, 45f));
 				}
