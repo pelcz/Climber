@@ -31,7 +31,7 @@ public class ec_player : MonoBehaviour
 	public bool inAir = false;
 
 	public GameObject ground_ref;
-	private float deathCountDown = 3.5f;
+	private float deathCountDown = 2f;
 
 	//AWAKE//
 	void Awake()
@@ -69,7 +69,8 @@ public class ec_player : MonoBehaviour
 		{
 			deathCountDown-=Time.deltaTime;
 			if(deathCountDown<-0f)
-				Application.LoadLevel(0); //reset game
+				brain.showBar();
+				//Application.LoadLevel(0); //reset game
 			//breaks because of wall colliders get turned off
 			//GetComponent<BoxCollider2D> ().isTrigger=true;
 		}
@@ -111,8 +112,8 @@ public class ec_player : MonoBehaviour
 
 		//temp removal of ground collision to fix bug where dying at the beggining will make the player stuck
 		ground_ref.GetComponent<BoxCollider2D> ().enabled = false;
-		brain.died (); //remove coins
-		bar_glow.glow ("sub"); //play red glow
+		//brain.died (); //remove coins
+		//bar_glow.glow ("sub"); //play red glow
 	}
 
 	//IMPACT//
