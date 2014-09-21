@@ -24,7 +24,7 @@ public class brain : MonoBehaviour {
 	public static GameObject Bar;
 	public UISlider progressBar;
 	public UILabel level_text;
-	public UILabel points_text;
+	public static GameObject points_text;
 	static int level = 1;
 	//SOUNDS
 	public AudioClip collectSound;
@@ -38,6 +38,7 @@ public class brain : MonoBehaviour {
 	{
 		currentState = gameState.starting; //set initial gamestate
 		Bar = GameObject.Find("bar");
+		points_text = GameObject.Find("points");
 		tile_list = tile_list_editor; //assign our static list to the editor list so that our static function can use it 
 		lastTile = lastTile_editor; //assign our static lastTile to the editor one so that our static function can use it 
 		coinDecrease = Mathf.RoundToInt(goal/10);
@@ -57,14 +58,14 @@ public class brain : MonoBehaviour {
 			break;
 			case gameState.playing: //**PLAYING**//
 				//update point counter
-				points_text.text = points.ToString ();
+				points_text.GetComponent<UILabel>().text = points.ToString ();
 			break;
 			case gameState.scoring: //**SCORING**//
 				if(Bar.GetComponent<UISprite> ().alpha<1f)
 				{
 					Bar.GetComponent<UISprite> ().alpha += 0.1f; //make the bar visible
 				}
-				points_text.text = points.ToString ();//update point counter
+				points_text.GetComponent<UILabel>().text = points.ToString ();//update point counter
 
 				//reduce points and add to total points over time
 				pointCountTime+=Time.deltaTime;
@@ -72,7 +73,10 @@ public class brain : MonoBehaviour {
 				{
 					points -= 1; //remove from points (counter)
 					totalPoints += 1; //add to total points (bar)
+					audio.PlayOneShot(collectSound);
 					//bar_glow.glow("add");
+					points_text.GetComponent<TweenScale> ().ResetToBeginning ();
+					points_text.GetComponent<TweenScale>().PlayForward();
 					pointCountTime = 0f; //reset counter
 				}
 
@@ -125,6 +129,8 @@ public class brain : MonoBehaviour {
 	public static void addPoints(int amount)
 	{
 		points += amount;//add to points counter
+		points_text.GetComponent<TweenScale> ().ResetToBeginning ();
+		points_text.GetComponent<TweenScale>().PlayForward();
 		//cap points
 //		if (points < 0)
 //		{
