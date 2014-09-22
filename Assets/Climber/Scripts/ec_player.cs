@@ -61,43 +61,37 @@ public class ec_player : MonoBehaviour
 		else
 			inAir = false;
 
-		//Flip to direction the player is flying if in the air
-		if(inAir)
+		//Rotate to direction the player is flying if in the air
+		if(inAir && !dead)
 		{
-			Debug.Log("rotate");
 			//Handle rotation to trajectory
 			float angle = Mathf.Atan (rigidbody2D.velocity.y/rigidbody2D.velocity.x); // Find angle in radians
 			if((rigidbody2D.velocity.y != 0)||(rigidbody2D.velocity.x != 0))
 			{
 				angle *= Mathf.Rad2Deg; // Convert to degrees
+				Debug.Log(angle);
+				if(rigidbody2D.velocity.x==0)
+					angle = 0f;
 			}
 			else
 			{
-				if(rigidbody2D.velocity.x==0 && rigidbody2D.velocity.y>0f)
-					angle = 0.1f;
-				else if(rigidbody2D.velocity.x==0 && rigidbody2D.velocity.y<0f)
-					angle = 180f;
-				else
-					angle = 0.1f;
+				angle = 0f;
 			}
+			//FLIP UP AND DOWN WHEN RISING OR FALLING
 			if(rigidbody2D.velocity.y>0)
 			{
-				angle = angle *-1f;
+				Vector3 newScale = body.transform.localScale;
+				newScale.y = 1.335934f;
+				body.transform.localScale = newScale;
 			}
 			else if(rigidbody2D.velocity.y<0)
 			{
-				angle = angle * 1f;
+				Vector3 newScale = body.transform.localScale;
+				newScale.y = -1.335934f;
+				body.transform.localScale = newScale;
 			}
-			body.transform.eulerAngles = new Vector3(0f, 0f, angle); // Assign rotation
-
-			if(rigidbody2D.velocity.x>0)//right
-			{
-				//Flip("left");
-			}
-			else if(rigidbody2D.velocity.x<0)//left
-			{
-				//Flip("right");
-			}
+			// Assign rotation
+			body.transform.eulerAngles = new Vector3(0f, 0f, -angle);
 		}
 
 		//OnGround
