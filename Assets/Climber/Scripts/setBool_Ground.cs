@@ -13,7 +13,7 @@ public class setBool_Ground : MonoBehaviour {
 	//ENTER
 	void OnTriggerEnter2D (Collider2D col)
 	{
-		if(col.tag == "ground" && player_ref.tag == "Player")
+		if((col.tag == "ground" || col.tag == "Wall") && player_ref.tag == "Player")
 		{
 			player_ref.onGround = true;
 			//player_ref.impact();
@@ -22,7 +22,7 @@ public class setBool_Ground : MonoBehaviour {
 	//STAY
 	void OnTriggerStay2D (Collider2D col)
 	{
-		if(col.tag == "ground" && player_ref.tag == "Player")
+		if((col.tag == "ground" || col.tag == "Wall") && player_ref.tag == "Player")
 		{
 			player_ref.onGround = true;
 		}
@@ -30,7 +30,7 @@ public class setBool_Ground : MonoBehaviour {
 	//EXIT
 	void OnTriggerExit2D (Collider2D col)
 	{
-		if(col.tag == "ground" && player_ref.tag == "Player")
+		if((col.tag == "ground" || col.tag == "Wall") && player_ref.tag == "Player")
 		{
 			player_ref.onGround = false;
 		}
