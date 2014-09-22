@@ -16,6 +16,7 @@ public class ec_player : MonoBehaviour
 	public bool onLeft;
 	public bool onRight;
 	public bool onGround = true;
+	public bool waiting = true;
 
 
 	private bool tapping;
@@ -32,6 +33,10 @@ public class ec_player : MonoBehaviour
 
 	public GameObject ground_ref;
 	private float deathCountDown = 2f;
+
+	public float speedBoost = 0f;
+	public float speedBoostCap = 1100f;
+	public float speedBoostAmount = 1f;
 
 	//AWAKE//
 	void Awake()
@@ -166,6 +171,7 @@ public class ec_player : MonoBehaviour
 					{
 						if(xdis>0)
 						{
+							waiting = false;
 							Debug.Log("fling left");
 							//reset wall bools
 							onLeft = false;
@@ -173,9 +179,14 @@ public class ec_player : MonoBehaviour
 							onGround = false;
 
 							//Apply Fling!
-							rigidbody2D.AddForce(new Vector2(-1f * flingSpeed, 1 * flingHeight));
+							speedBoost = rigidbody2D.velocity.y*speedBoostAmount;
+							if(speedBoostAmount>speedBoostCap)
+							{
+								speedBoostAmount = speedBoostCap;
+							}
+							rigidbody2D.velocity = new Vector2(0f,0f); //null out velocity before applying force
+							rigidbody2D.AddForce(new Vector2(-1f * flingSpeed, 1 * (flingHeight+speedBoost)), ForceMode2D.Force);
 							AudioSource.PlayClipAtPoint(jumpSound, transform.position, 0.8f);
-							GameObject.Find("instructions").GetComponent<UILabel>().alpha = 0f;
 							if(Camera.main.audio.isPlaying==false)
 								Camera.main.audio.Play();
 						}
@@ -184,6 +195,7 @@ public class ec_player : MonoBehaviour
 					{
 						if(xdis<0)
 						{
+							waiting = false;
 							Debug.Log("fling right");
 							//reset wall bools
 							onLeft = false;
@@ -191,9 +203,14 @@ public class ec_player : MonoBehaviour
 							onGround = false;
 							
 							//Apply Fling!
-							rigidbody2D.AddForce(new Vector2(1f * flingSpeed, 1 * flingHeight));
+							speedBoost = rigidbody2D.velocity.y*speedBoostAmount;
+							if(speedBoostAmount>speedBoostCap)
+							{
+								speedBoostAmount = speedBoostCap;
+							}
+							rigidbody2D.velocity = new Vector2(0f,0f); //null out velocity before applying force
+							rigidbody2D.AddForce(new Vector2(1f * flingSpeed, 1 * (flingHeight+speedBoost)), ForceMode2D.Force);
 							AudioSource.PlayClipAtPoint(jumpSound, transform.position, 0.8f);
-							GameObject.Find("instructions").GetComponent<UILabel>().alpha = 0f;
 							if(Camera.main.audio.isPlaying==false)
 								Camera.main.audio.Play();
 						}
@@ -231,6 +248,7 @@ public class ec_player : MonoBehaviour
 			{
 				if(Input.GetKeyDown(KeyCode.LeftArrow))
 				{
+					waiting = false;
 					Debug.Log("fling left");
 					//reset wall bools
 					onLeft = false;
@@ -238,10 +256,14 @@ public class ec_player : MonoBehaviour
 					onGround = false;
 					
 					//Apply Fling!
-					//rigidbody2D.velocity = new Vector2(0f,0f); //null out velocity before applying force
-					rigidbody2D.AddForce(new Vector2(-1f * flingSpeed, 1 * flingHeight), ForceMode2D.Force);
+					speedBoost = rigidbody2D.velocity.y*speedBoostAmount;
+					if(speedBoostAmount>speedBoostCap)
+					{
+						speedBoostAmount = speedBoostCap;
+					}
+					rigidbody2D.velocity = new Vector2(0f,0f); //null out velocity before applying force
+					rigidbody2D.AddForce(new Vector2(-1f * flingSpeed, 1 * (flingHeight+speedBoost)), ForceMode2D.Force);
 					AudioSource.PlayClipAtPoint(jumpSound, transform.position, 0.8f);
-					GameObject.Find("instructions").GetComponent<UILabel>().alpha = 0f;
 					if(Camera.main.audio.isPlaying==false)
 						Camera.main.audio.Play();
 				}
@@ -250,6 +272,7 @@ public class ec_player : MonoBehaviour
 			{
 				if(Input.GetKeyDown(KeyCode.RightArrow))
 				{
+					waiting = false;
 					Debug.Log("fling right");
 					//reset wall bools
 					onLeft = false;
@@ -257,10 +280,14 @@ public class ec_player : MonoBehaviour
 					onGround = false;
 					
 					//Apply Fling!
-					//rigidbody2D.velocity = new Vector2(0f,0f); //null out velocity before applying force
-					rigidbody2D.AddForce(new Vector2(1f * flingSpeed, 1 * flingHeight), ForceMode2D.Force);
+					speedBoost = rigidbody2D.velocity.y*speedBoostAmount;
+					if(speedBoostAmount>speedBoostCap)
+					{
+						speedBoostAmount = speedBoostCap;
+					}
+					rigidbody2D.velocity = new Vector2(0f,0f); //null out velocity before applying force
+					rigidbody2D.AddForce(new Vector2(1f * flingSpeed, 1 * (flingHeight+speedBoost)), ForceMode2D.Force);
 					AudioSource.PlayClipAtPoint(jumpSound, transform.position, 0.8f);
-					GameObject.Find("instructions").GetComponent<UILabel>().alpha = 0f;
 					if(Camera.main.audio.isPlaying==false)
 						Camera.main.audio.Play();
 				}

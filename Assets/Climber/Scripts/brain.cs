@@ -32,10 +32,13 @@ public class brain : MonoBehaviour {
 	//SATES
 	public enum gameState{starting,playing,paused,scoring};
 	public static gameState currentState = gameState.starting;
+	//Player
+	private ec_player player_ref;
 
 	// Use this for initialization
 	void Start () 
 	{
+		player_ref = GameObject.Find ("Player").GetComponent<ec_player>();
 		currentState = gameState.starting; //set initial gamestate
 		Bar = GameObject.Find("bar");
 		points_text = GameObject.Find("points");
@@ -54,11 +57,13 @@ public class brain : MonoBehaviour {
 		switch (currentState) 
 		{
 			case gameState.starting: //**STARTING**//
-				currentState = gameState.playing; //go to playing
+				if(player_ref.waiting==false) //if player has given first input (valid swipe)
+					currentState = gameState.playing; //go to playing
 			break;
 			case gameState.playing: //**PLAYING**//
 				//update point counter
 				points_text.GetComponent<UILabel>().text = points.ToString ();
+				GameObject.Find("instructions").GetComponent<UILabel>().enabled = false;
 			break;
 			case gameState.scoring: //**SCORING**//
 				if(Bar.GetComponent<UISprite> ().alpha<1f)
