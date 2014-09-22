@@ -49,7 +49,7 @@ public class pickup : MonoBehaviour {
 		AudioSource.PlayClipAtPoint(collectSound, transform.position);
 		brain.addPoints(1); //add 1 point
 		GameObject.Instantiate(impact_part, transform.position, Quaternion.identity);
-		bar_glow.glow ("add");
+		//bar_glow.glow ("add");
 		Destroy(transform.gameObject); //destroy this
 	}
 }
