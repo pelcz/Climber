@@ -62,53 +62,37 @@ public class ec_player : MonoBehaviour
 			inAir = false;
 
 		//Rotate to direction the player is flying if in the air
-		if(inAir && !dead)
+		if(inAir)
 		{
-			//Handle rotation to trajectory
-			float angle = Mathf.Atan (rigidbody2D.velocity.y/rigidbody2D.velocity.x); // Find angle in radians
-			if((rigidbody2D.velocity.y != 0)||(rigidbody2D.velocity.x != 0))
-			{
-				angle *= Mathf.Rad2Deg; // Convert to degrees
-				Debug.Log(angle);
-				if(rigidbody2D.velocity.x==0)
-					angle = 0f;
-			}
-			else
-			{
-				angle = 0f;
-			}
-			//FLIP UP AND DOWN WHEN RISING OR FALLING
-			if(rigidbody2D.velocity.y>0)
-			{
-				Vector3 newScale = body.transform.localScale;
-				newScale.y = 1.335934f;
-				body.transform.localScale = newScale;
-			}
-			else if(rigidbody2D.velocity.y<0)
-			{
-				Vector3 newScale = body.transform.localScale;
-				newScale.y = -1.335934f;
-				body.transform.localScale = newScale;
-			}
-			// Assign rotation
-			body.transform.eulerAngles = new Vector3(0f, 0f, -angle);
+			body.transform.right = rigidbody2D.velocity.normalized;
+		}
+		if(onGround && !onLeft && !onRight) //if sitting on the ground - rotate flat
+		{
+			body.transform.eulerAngles = new Vector3(0f, 0f, 90f); // Assign rotation to flat
 		}
 
-		//OnGround
-		if(onGround && !onLeft && !onRight)
-		{
-			body.transform.eulerAngles = new Vector3(0f, 0f, 0f); // Assign rotation to flat
-		}
-
-		//Turn off collider when under water
+		//Turn off collider when under water/dead
 		if(dead)
 		{
 			deathCountDown-=Time.deltaTime;
 			if(deathCountDown<-0f)
 				brain.showBar();
-				//Application.LoadLevel(0); //reset game
-			//breaks because of wall colliders get turned off
-			//GetComponent<BoxCollider2D> ().isTrigger=true;
+		}
+	}
+
+	//FLIP//
+	public void Flip(string side)
+	{
+		//play squish tween
+		body.FindChild("body_ren").GetComponent<TweenScale> ().ResetToBeginning ();
+		body.FindChild("body_ren").GetComponent<TweenScale>().PlayForward();
+		if(side == "right")
+		{
+			body.transform.eulerAngles = new Vector3(0f, 0f, 180f); // Assign rotation
+		}
+		if(side == "left")
+		{
+			body.transform.eulerAngles = new Vector3(0f, 0f, 0f); // Assign rotation
 		}
 	}
 
@@ -118,18 +102,6 @@ public class ec_player : MonoBehaviour
 		Camera.main.GetComponent<FollowPlayer> ().enabled = false;
 
 		Debug.Log("DIE");
-		// Find all of the sprite renderers on this object and it's children.
-		SpriteRenderer[] otherRenderers = GetComponentsInChildren<SpriteRenderer>();
-
-		// Disable all of them sprite renderers.
-		foreach(SpriteRenderer s in otherRenderers)
-		{
-			s.enabled = false;
-		}
-
-		// Re-enable the main sprite renderer and set it's sprite to the deadEnemy sprite.
-		ren.enabled = true;
-		ren.sprite = deadEnemy;
 
 		// Set dead to true.
 		dead = true;
@@ -158,30 +130,6 @@ public class ec_player : MonoBehaviour
 		AudioSource.PlayClipAtPoint(impactSound, transform.position);
 		//should play smoke puff
 		//GameObject.Instantiate(impact_part, transform.position, Quaternion.identity);
-	}
-
-	//FLIP//
-	public void Flip(string side)
-	{
-		//play tween
-		body.GetComponent<TweenScale> ().ResetToBeginning ();
-		body.GetComponent<TweenScale>().PlayForward();
-		if(side == "right")
-		{
-			// Multiply the x component of localScale by -1.
-			//Vector3 newScale = transform.FindChild("body").transform.localScale;
-			//newScale.x = -2.5f;
-			//transform.FindChild("body").transform.localScale = newScale;
-			body.transform.eulerAngles = new Vector3(0f, 0f, 90f); // Assign rotation
-		}
-		if(side == "left")
-		{
-			// Multiply the x component of localScale by -1.
-			//Vector3 newScale = transform.FindChild("body").transform.localScale;
-			//newScale.x = 2.5f;
-			//transform.FindChild("body").transform.localScale = newScale;
-			body.transform.eulerAngles = new Vector3(0f, 0f, 270f); // Assign rotation
-		}
 	}
 
 	//GET INPUT FROM PLAYER//
