@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class brain : MonoBehaviour {
 
 	//Tile list (types of tiles to be randomly chosen from)
 	public GameObject[] tile_list_editor; //Tiles added through editor
 	private static GameObject[] tile_list;
+	public Vector2[] tile_list_min_max_editor;
+	private static Vector2[] tile_list_min_max;
 	//Last tile (tile that a new tile will be spawned above)
 	public GameObject lastTile_editor; //First time should be set through editor for now
 	private static GameObject lastTile;
@@ -44,6 +47,7 @@ public class brain : MonoBehaviour {
 		points_text = GameObject.Find("points");
 		tile_list = tile_list_editor; //assign our static list to the editor list so that our static function can use it 
 		lastTile = lastTile_editor; //assign our static lastTile to the editor one so that our static function can use it 
+		tile_list_min_max = tile_list_min_max_editor; //assign our static tile mon max to the editor one so that our static function can use it 
 		coinDecrease = Mathf.RoundToInt(goal/10);
 		tileCount = 0; //reset tile count on new round
 		//Call initial tile spawn
@@ -114,14 +118,23 @@ public class brain : MonoBehaviour {
 	//Spawn a new random tile above the last one
 	public static void spawnTile()
 	{
+		int i = 0;
+		List<GameObject> new_tile_list = new List<GameObject>();
+		//assign new list based on availabale tiles when excluded due to coin amount (difficulty)
+		foreach(GameObject T in tile_list)
+		{
+			if((points>=tile_list_min_max[i].x) && (points<=tile_list_min_max[i].y || tile_list_min_max[i].y==0)) //if within min max amounts (0 max = infinite)
+			{
+				new_tile_list.Add(T); //add the tile to usable tiles
+			}
+			i+=1;
+		}
+
 		GameObject newTile;
-		int ran = Random.Range (0, tile_list.Length);
+		int ran = Random.Range (0, new_tile_list.Count);
 
-		//only spawn 5 (arrow) after passing 10 tiles
-		if (ran == 5 && tileCount<10)
-			ran = 0;
 
-		GameObject chosenTile = tile_list[ran]; //pick random tile from given list
+		GameObject chosenTile = new_tile_list[ran]; //pick random tile from given list
 		Vector3 newPos = lastTile.transform.position;
 		newPos.y += tile_height; //Set new tiles position above the last tiles position
 

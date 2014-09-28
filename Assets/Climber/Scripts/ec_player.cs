@@ -34,7 +34,7 @@ public class ec_player : MonoBehaviour
 	public bool inAir = false;
 
 	public GameObject ground_ref;
-	private float deathCountDown = 2f;
+	private float deathCountDown = 1.2f;
 	//Boost
 	public float speedBoost = 0f;
 	public float speedBoostCap = 1100f;
